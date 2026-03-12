@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { StoreProvider } from './context/StoreContext';
+import { AuthProvider } from './context/AuthContext';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { HomePage } from './components/HomePage';
@@ -9,6 +10,8 @@ import { CDs } from './components/CDs';
 import { Tocadiscos } from './components/Tocadiscos';
 import { SegundaMano } from './components/SegundaMano';
 import { LaTienda } from './components/LaTienda';
+import { RegisterPage } from './components/RegisterPage';
+import { ProfilePage } from './components/ProfilePage';
 import { ProductDetail } from './components/ProductDetail';
 import { Cart } from './components/Cart';
 import { Checkout } from './components/Checkout';
@@ -76,13 +79,18 @@ export default function App() {
         return <SegundaMano onViewDetails={handleViewDetails} />;
       case 'la-tienda':
         return <LaTienda />;
+      case 'registro':
+        return <RegisterPage onNavigate={handleNavigate} />;
+      case 'perfil':
+        return <ProfilePage onNavigate={handleNavigate} />;
       default:
         return <HomePage onNavigate={handleNavigate} />;
     }
   };
 
   return (
-    <StoreProvider>
+    <AuthProvider>
+      <StoreProvider>
       <div className="min-h-screen flex flex-col bg-gray-50">
         <Header
           currentSection={currentSection}
@@ -121,5 +129,6 @@ export default function App() {
         />
       </div>
     </StoreProvider>
+    </AuthProvider>
   );
 }

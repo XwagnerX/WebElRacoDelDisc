@@ -1,5 +1,6 @@
 import { ShoppingCart, Heart, User, Disc3, ChevronDown } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
+import { useAuth } from '../context/AuthContext';
 import { useState, useRef, useEffect } from 'react';
 
 interface HeaderProps {
@@ -11,6 +12,7 @@ interface HeaderProps {
 
 export function Header({ currentSection, onNavigate, onOpenCart, onOpenWishlist }: HeaderProps) {
   const { getCartItemsCount, wishlist } = useStore();
+  const { user, isAuthenticated, logout } = useAuth();
   const [isProductsOpen, setIsProductsOpen] = useState(false);
   const [isUserOpen, setIsUserOpen] = useState(false);
   const productsRef = useRef<HTMLDivElement>(null);
@@ -43,12 +45,18 @@ export function Header({ currentSection, onNavigate, onOpenCart, onOpenWishlist 
 
   const handleLogout = () => {
     setIsUserOpen(false);
-    alert('Sesión cerrada');
+    logout();
+    onNavigate('home');
   };
 
   const handleAccountDetails = () => {
     setIsUserOpen(false);
-    alert('Ver detalles de cuenta');
+    onNavigate('perfil');
+  };
+
+  const handleRegister = () => {
+    setIsUserOpen(false);
+    onNavigate('registro');
   };
 
   return (
@@ -127,6 +135,17 @@ export function Header({ currentSection, onNavigate, onOpenCart, onOpenWishlist 
             >
               La tienda
             </button>
+
+            <button
+              onClick={() => onNavigate(isAuthenticated ? 'perfil' : 'registro')}
+              className={`text-sm transition-colors ${
+                ['perfil', 'registro'].includes(currentSection)
+                  ? 'text-purple-600 font-semibold'
+                  : 'text-gray-700 hover:text-purple-600'
+              }`}
+            >
+              {isAuthenticated ? 'Mi perfil' : 'Crear cuenta'}
+            </button>
           </nav>
 
           {/* Actions */}
@@ -143,18 +162,35 @@ export function Header({ currentSection, onNavigate, onOpenCart, onOpenWishlist 
 
               {isUserOpen && (
                 <div className="absolute top-full right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2">
-                  <button
-                    onClick={handleAccountDetails}
-                    className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-purple-50 hover:text-purple-600 transition-colors"
-                  >
-                    Detalles de cuenta
-                  </button>
-                  <button
-                    onClick={handleLogout}
-                    className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-purple-50 hover:text-purple-600 transition-colors"
-                  >
-                    Cerrar sesión
-                  </button>
+                  {isAuthenticated ? (
+                    <>
+                      <div className="px-4 py-2 border-b border-gray-100">
+                        <p className="text-sm font-medium text-gray-900 truncate">{user?.name}</p>
+                        <p className="text-xs text-gray-500 truncate">{user?.email}</p>
+                      </div>
+                      <button
+                        onClick={handleAccountDetails}
+                        className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-purple-50 hover:text-purple-600 transition-colors"
+                      >
+                        Mi perfil
+                      </button>
+                      <button
+                        onClick={handleLogout}
+                        className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-purple-50 hover:text-purple-600 transition-colors"
+                      >
+                        Cerrar sesión
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <button
+                        onClick={handleRegister}
+                        className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-purple-50 hover:text-purple-600 transition-colors"
+                      >
+                        Crear cuenta / Iniciar sesión
+                      </button>
+                    </>
+                  )}
                 </div>
               )}
             </div>
@@ -249,6 +285,16 @@ export function Header({ currentSection, onNavigate, onOpenCart, onOpenWishlist 
             }`}
           >
             La tienda
+          </button>
+          <button
+            onClick={() => onNavigate(isAuthenticated ? 'perfil' : 'registro')}
+            className={`text-sm whitespace-nowrap px-3 py-1 rounded-full transition-colors ${
+              ['perfil', 'registro'].includes(currentSection)
+                ? 'bg-purple-600 text-white'
+                : 'text-gray-700 hover:bg-gray-100'
+            }`}
+          >
+            {isAuthenticated ? 'Mi perfil' : 'Crear cuenta'}
           </button>
         </nav>
       </div>

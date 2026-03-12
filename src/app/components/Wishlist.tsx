@@ -19,7 +19,7 @@ export function Wishlist({ isOpen, onClose, onViewDetails }: WishlistProps) {
 
   return (
     <div
-      className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-end md:items-center justify-end"
+      className="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-50 flex items-end md:items-center justify-end"
       onClick={onClose}
     >
       <div
@@ -42,7 +42,7 @@ export function Wishlist({ isOpen, onClose, onViewDetails }: WishlistProps) {
         </div>
 
         {/* Wishlist Items */}
-        <div className="flex-1 overflow-y-auto p-6">
+        <div className="flex-1 overflow-y-auto p-6 bg-gray-50">
           {wishlist.length === 0 ? (
             <div className="text-center py-12">
               <Heart className="w-16 h-16 text-gray-300 mx-auto mb-4" />
@@ -56,7 +56,7 @@ export function Wishlist({ isOpen, onClose, onViewDetails }: WishlistProps) {
               {wishlist.map((product) => (
                 <div
                   key={product.id}
-                  className="flex gap-4 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                  className="flex gap-4 p-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow"
                 >
                   <img
                     src={product.image}
