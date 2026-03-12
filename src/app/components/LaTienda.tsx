@@ -68,7 +68,7 @@ export function LaTienda() {
                 <Mail className="w-5 h-5 text-purple-600 mt-1 flex-shrink-0" />
                 <div>
                   <p className="font-semibold">Email</p>
-                  <p className="text-gray-600">info@vinylstore.es</p>
+                  <p className="text-gray-600">elracodeldisc@gmail.com</p>
                 </div>
               </div>
             </div>
