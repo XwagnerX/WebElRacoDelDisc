@@ -20,6 +20,7 @@ import { ProductDetail } from './components/ProductDetail';
 import { Cart } from './components/Cart';
 import { Checkout } from './components/Checkout';
 import { Wishlist } from './components/Wishlist';
+import { SearchResults } from './components/SearchResults';
 import { Product } from './types';
 
 export default function App() {
@@ -29,8 +30,17 @@ export default function App() {
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [isWishlistOpen, setIsWishlistOpen] = useState(false);
 
+  // search state
+  const [searchQuery, setSearchQuery] = useState('');
+
   const handleNavigate = (section: string) => {
     setCurrentSection(section);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+    setCurrentSection('busqueda');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -83,6 +93,14 @@ export default function App() {
         return <SegundaMano onViewDetails={handleViewDetails} />;
       case 'la-tienda':
         return <LaTienda />;
+      case 'busqueda':
+        // render search results only when a query exists
+        return (
+          <SearchResults
+            query={searchQuery}
+            onViewDetails={handleViewDetails}
+          />
+        );
       case 'registro':
         return <RegisterPage onNavigate={handleNavigate} />;
       case 'perfil':
@@ -109,6 +127,7 @@ export default function App() {
           onNavigate={handleNavigate}
           onOpenCart={handleOpenCart}
           onOpenWishlist={handleOpenWishlist}
+          onSearch={handleSearch}
         />
         
         <main className="flex-1">

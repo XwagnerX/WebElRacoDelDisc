@@ -1,17 +1,28 @@
+import React, { useState, useRef, useEffect } from 'react';
 import { ShoppingCart, Heart, User, Disc3, ChevronDown } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
 import { useAuth } from '../context/AuthContext';
-import { useState, useRef, useEffect } from 'react';
 
 interface HeaderProps {
   currentSection: string;
   onNavigate: (section: string) => void;
   onOpenCart: () => void;
   onOpenWishlist: () => void;
+  onSearch: (query: string) => void; // new prop for search
 }
 
-export function Header({ currentSection, onNavigate, onOpenCart, onOpenWishlist }: HeaderProps) {
+export function Header({ currentSection, onNavigate, onOpenCart, onOpenWishlist, onSearch }: HeaderProps) {
   const { getCartItemsCount, wishlist } = useStore();
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const trimmed = searchTerm.trim();
+    if (trimmed) {
+      onSearch(trimmed);
+      setSearchTerm('');
+    }
+  };
   const { user, isAuthenticated, logout } = useAuth();
   const [isProductsOpen, setIsProductsOpen] = useState(false);
   const [isUserOpen, setIsUserOpen] = useState(false);
@@ -71,6 +82,17 @@ export function Header({ currentSection, onNavigate, onOpenCart, onOpenWishlist 
             <Disc3 className="w-8 h-8 text-purple-600" />
             <span className="text-xl font-bold">El racó del disc</span>
           </button>
+
+          {/* Search (desktop) */}
+          <form onSubmit={handleSearchSubmit} className="hidden md:block ml-6">
+            <input
+              type="text"
+              value={searchTerm}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
+              placeholder="Buscar productos..."
+              className="border rounded px-2 py-1 text-sm w-48 focus:outline-none focus:ring-2 focus:ring-purple-600"
+            />
+          </form>
 
           {/* Navigation */}
           <nav className="hidden md:flex items-center gap-6">
@@ -225,6 +247,18 @@ export function Header({ currentSection, onNavigate, onOpenCart, onOpenWishlist 
 
       {/* Mobile Navigation */}
       <div className="md:hidden border-t border-gray-200">
+        {/* search input on mobile */}
+        <div className="px-4 py-2">
+          <form onSubmit={handleSearchSubmit}>
+            <input
+              type="text"
+              value={searchTerm}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
+              placeholder="Buscar..."
+              className="w-full border rounded px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-purple-600"
+            />
+          </form>
+        </div>
         <nav className="flex overflow-x-auto px-4 py-2 gap-4">
           <button
             onClick={() => onNavigate('novedades')}
