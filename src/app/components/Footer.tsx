@@ -1,6 +1,10 @@
-import { Facebook, Instagram, Twitter, Youtube } from 'lucide-react';
+import { Twitter } from 'lucide-react';
 
-export function Footer() {
+interface FooterProps {
+  onNavigate: (section: string) => void;
+}
+
+export function Footer({ onNavigate }: FooterProps) {
   return (
     <footer className="bg-gray-900 text-gray-300 mt-auto">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -18,26 +22,9 @@ export function Footer() {
           <div>
             <h3 className="text-white font-semibold mb-4">Síguenos</h3>
             <div className="flex gap-4">
+              Twitter / X
               <a
-                href="https://facebook.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-white transition-colors"
-                aria-label="Facebook"
-              >
-                <Facebook className="w-5 h-5" />
-              </a>
-              <a
-                href="https://instagram.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-white transition-colors"
-                aria-label="Instagram"
-              >
-                <Instagram className="w-5 h-5" />
-              </a>
-              <a
-                href="https://twitter.com"
+                href="https://x.com/elraco_delDisc"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-white transition-colors"
@@ -45,15 +32,7 @@ export function Footer() {
               >
                 <Twitter className="w-5 h-5" />
               </a>
-              <a
-                href="https://youtube.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-white transition-colors"
-                aria-label="YouTube"
-              >
-                <Youtube className="w-5 h-5" />
-              </a>
+
             </div>
           </div>
 
@@ -62,24 +41,36 @@ export function Footer() {
             <h3 className="text-white font-semibold mb-4">Legal</h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <a href="#" className="hover:text-white transition-colors">
+                <button
+                  onClick={() => onNavigate('terminos')}
+                  className="hover:text-white transition-colors text-left"
+                >
                   Términos y Condiciones
-                </a>
+                </button>
               </li>
               <li>
-                <a href="#" className="hover:text-white transition-colors">
+                <button
+                  onClick={() => onNavigate('privacidad')}
+                  className="hover:text-white transition-colors text-left"
+                >
                   Política de Privacidad
-                </a>
+                </button>
               </li>
               <li>
-                <a href="#" className="hover:text-white transition-colors">
+                <button
+                  onClick={() => onNavigate('cookies')}
+                  className="hover:text-white transition-colors text-left"
+                >
                   Política de Cookies
-                </a>
+                </button>
               </li>
               <li>
-                <a href="#" className="hover:text-white transition-colors">
+                <button
+                  onClick={() => onNavigate('devoluciones')}
+                  className="hover:text-white transition-colors text-left"
+                >
                   Política de Devoluciones
-                </a>
+                </button>
               </li>
             </ul>
           </div>

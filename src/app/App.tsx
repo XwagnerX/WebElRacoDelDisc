@@ -10,6 +10,10 @@ import { CDs } from './components/CDs';
 import { Tocadiscos } from './components/Tocadiscos';
 import { SegundaMano } from './components/SegundaMano';
 import { LaTienda } from './components/LaTienda';
+import { TerminosCondiciones } from './components/legal/TerminosCondiciones';
+import { PoliticaPrivacidad } from './components/legal/PoliticaPrivacidad';
+import { PoliticaCookies } from './components/legal/PoliticaCookies';
+import { PoliticaDevoluciones } from './components/legal/PoliticaDevoluciones';
 import { RegisterPage } from './components/RegisterPage';
 import { ProfilePage } from './components/ProfilePage';
 import { ProductDetail } from './components/ProductDetail';
@@ -83,6 +87,14 @@ export default function App() {
         return <RegisterPage onNavigate={handleNavigate} />;
       case 'perfil':
         return <ProfilePage onNavigate={handleNavigate} />;
+      case 'terminos':
+        return <TerminosCondiciones />;
+      case 'privacidad':
+        return <PoliticaPrivacidad />;
+      case 'cookies':
+        return <PoliticaCookies />;
+      case 'devoluciones':
+        return <PoliticaDevoluciones />;
       default:
         return <HomePage onNavigate={handleNavigate} />;
     }
@@ -103,7 +115,7 @@ export default function App() {
           {renderSection()}
         </main>
 
-        <Footer />
+        <Footer onNavigate={handleNavigate} />
 
         {/* Modals */}
         <ProductDetail
