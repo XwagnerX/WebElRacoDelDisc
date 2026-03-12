@@ -1,5 +1,5 @@
 import { X, ShoppingCart, Heart, Star } from 'lucide-react';
-import { Product, Review } from '../types';
+import { Product } from '../types';
 import { useStore } from '../context/StoreContext';
 import { reviews } from '../data/products';
 
@@ -50,7 +50,6 @@ export function ProductDetail({ product, onClose }: ProductDetailProps) {
 
         <div className="p-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {/* Image */}
             <div className="relative aspect-square rounded-lg overflow-hidden bg-gray-100">
               <img
                 src={product.image}
@@ -69,7 +68,6 @@ export function ProductDetail({ product, onClose }: ProductDetailProps) {
               )}
             </div>
 
-            {/* Product Info */}
             <div>
               <h3 className="text-3xl font-bold mb-2">{product.title}</h3>
               <p className="text-xl text-gray-600 mb-4">{product.artist}</p>
@@ -130,6 +128,7 @@ export function ProductDetail({ product, onClose }: ProductDetailProps) {
                   <ShoppingCart className="w-5 h-5" />
                   Añadir al Carrito
                 </button>
+
                 <button
                   onClick={handleToggleWishlist}
                   className={`px-6 py-3 rounded-lg border-2 transition-colors ${
@@ -138,15 +137,12 @@ export function ProductDetail({ product, onClose }: ProductDetailProps) {
                       : 'border-gray-300 hover:border-purple-600 hover:bg-purple-50'
                   }`}
                 >
-                  <Heart
-                    className={`w-5 h-5 ${inWishlist ? 'fill-red-500' : ''}`}
-                  />
+                  <Heart className={`w-5 h-5 ${inWishlist ? 'fill-red-500' : ''}`} />
                 </button>
               </div>
             </div>
           </div>
 
-          {/* Reviews */}
           {productReviews.length > 0 && (
             <div className="mt-12">
               <h3 className="text-2xl font-bold mb-6">Reseñas de Clientes</h3>

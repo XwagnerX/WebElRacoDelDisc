@@ -29,8 +29,6 @@ export default function App() {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [isWishlistOpen, setIsWishlistOpen] = useState(false);
-
-  // search state
   const [searchQuery, setSearchQuery] = useState('');
 
   const handleNavigate = (section: string) => {
@@ -94,7 +92,6 @@ export default function App() {
       case 'la-tienda':
         return <LaTienda />;
       case 'busqueda':
-        // render search results only when a query exists
         return (
           <SearchResults
             query={searchQuery}
@@ -121,45 +118,45 @@ export default function App() {
   return (
     <AuthProvider>
       <StoreProvider>
-      <div className="min-h-screen flex flex-col bg-gray-50">
-        <Header
-          currentSection={currentSection}
-          onNavigate={handleNavigate}
-          onOpenCart={handleOpenCart}
-          onOpenWishlist={handleOpenWishlist}
-          onSearch={handleSearch}
-        />
-        
-        <main className="flex-1">
-          {renderSection()}
-        </main>
+        <div className="min-h-screen flex flex-col bg-gray-50">
+          <Header
+            currentSection={currentSection}
+            onNavigate={handleNavigate}
+            onOpenCart={handleOpenCart}
+            onOpenWishlist={handleOpenWishlist}
+            onSearch={handleSearch}
+            onViewDetails={handleViewDetails}
+          />
 
-        <Footer onNavigate={handleNavigate} />
+          <main className="flex-1">
+            {renderSection()}
+          </main>
 
-        {/* Modals */}
-        <ProductDetail
-          product={selectedProduct}
-          onClose={handleCloseDetails}
-        />
-        
-        <Cart
-          isOpen={isCartOpen}
-          onClose={handleCloseCart}
-          onCheckout={handleOpenCheckout}
-        />
+          <Footer onNavigate={handleNavigate} />
 
-        <Checkout
-          isOpen={isCheckoutOpen}
-          onClose={handleCloseCheckout}
-        />
+          <ProductDetail
+            product={selectedProduct}
+            onClose={handleCloseDetails}
+          />
 
-        <Wishlist
-          isOpen={isWishlistOpen}
-          onClose={handleCloseWishlist}
-          onViewDetails={handleViewDetails}
-        />
-      </div>
-    </StoreProvider>
+          <Cart
+            isOpen={isCartOpen}
+            onClose={handleCloseCart}
+            onCheckout={handleOpenCheckout}
+          />
+
+          <Checkout
+            isOpen={isCheckoutOpen}
+            onClose={handleCloseCheckout}
+          />
+
+          <Wishlist
+            isOpen={isWishlistOpen}
+            onClose={handleCloseWishlist}
+            onViewDetails={handleViewDetails}
+          />
+        </div>
+      </StoreProvider>
     </AuthProvider>
   );
 }

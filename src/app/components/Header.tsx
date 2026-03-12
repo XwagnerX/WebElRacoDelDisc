@@ -2,46 +2,87 @@ import React, { useState, useRef, useEffect } from 'react';
 import { ShoppingCart, Heart, User, Disc3, ChevronDown } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
 import { useAuth } from '../context/AuthContext';
+import { products } from '../data/products';
+import { Product } from '../types';
 
 interface HeaderProps {
   currentSection: string;
   onNavigate: (section: string) => void;
   onOpenCart: () => void;
   onOpenWishlist: () => void;
-  onSearch: (query: string) => void; // new prop for search
+  onSearch: (query: string) => void;
+  onViewDetails: (product: Product) => void;
 }
 
-export function Header({ currentSection, onNavigate, onOpenCart, onOpenWishlist, onSearch }: HeaderProps) {
+export function Header({
+  currentSection,
+  onNavigate,
+  onOpenCart,
+  onOpenWishlist,
+  onSearch,
+  onViewDetails
+}: HeaderProps) {
   const { getCartItemsCount, wishlist } = useStore();
-  const [searchTerm, setSearchTerm] = useState('');
-
-  const handleSearchSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const trimmed = searchTerm.trim();
-    if (trimmed) {
-      onSearch(trimmed);
-      setSearchTerm('');
-    }
-  };
   const { user, isAuthenticated, logout } = useAuth();
+
+  const [searchTerm, setSearchTerm] = useState('');
+  const [showSuggestions, setShowSuggestions] = useState(false);
   const [isProductsOpen, setIsProductsOpen] = useState(false);
   const [isUserOpen, setIsUserOpen] = useState(false);
+
   const productsRef = useRef<HTMLDivElement>(null);
   const userRef = useRef<HTMLDivElement>(null);
+  const searchDesktopRef = useRef<HTMLDivElement>(null);
+  const searchMobileRef = useRef<HTMLDivElement>(null);
+
+  const filteredProducts = searchTerm.trim()
+    ? products
+        .filter(
+          (p) =>
+            p.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            p.artist.toLowerCase().includes(searchTerm.toLowerCase())
+        )
+        .slice(0, 5)
+    : [];
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (productsRef.current && !productsRef.current.contains(event.target as Node)) {
         setIsProductsOpen(false);
       }
+
       if (userRef.current && !userRef.current.contains(event.target as Node)) {
         setIsUserOpen(false);
+      }
+
+      if (searchDesktopRef.current && !searchDesktopRef.current.contains(event.target as Node)) {
+        setShowSuggestions(false);
+      }
+
+      if (searchMobileRef.current && !searchMobileRef.current.contains(event.target as Node)) {
+        setShowSuggestions(false);
       }
     };
 
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const trimmed = searchTerm.trim();
+
+    if (trimmed) {
+      onSearch(trimmed);
+      setShowSuggestions(false);
+    }
+  };
+
+  const handleSuggestionSelect = (product: Product) => {
+    setSearchTerm('');
+    setShowSuggestions(false);
+    onViewDetails(product);
+  };
 
   const productCategories = [
     { id: 'vinilos', label: 'Vinilos' },
@@ -74,7 +115,6 @@ export function Header({ currentSection, onNavigate, onOpenCart, onOpenWishlist,
     <header className="bg-white shadow-sm sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          {/* Logo */}
           <button
             onClick={() => onNavigate('home')}
             className="flex items-center gap-2 hover:opacity-80 transition-opacity"
@@ -83,18 +123,62 @@ export function Header({ currentSection, onNavigate, onOpenCart, onOpenWishlist,
             <span className="text-xl font-bold">El racó del disc</span>
           </button>
 
-          {/* Search (desktop) */}
-          <form onSubmit={handleSearchSubmit} className="hidden md:block ml-6">
-            <input
-              type="text"
-              value={searchTerm}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
-              placeholder="Buscar productos..."
-              className="border rounded px-2 py-1 text-sm w-48 focus:outline-none focus:ring-2 focus:ring-purple-600"
-            />
-          </form>
+          <div className="hidden md:block ml-6 relative" ref={searchDesktopRef}>
+            <form onSubmit={handleSearchSubmit}>
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  setSearchTerm(e.target.value);
+                  setShowSuggestions(true);
+                }}
+                onFocus={() => setShowSuggestions(true)}
+                placeholder="Buscar productos..."
+                className="border rounded px-3 py-2 text-sm w-64 focus:outline-none focus:ring-2 focus:ring-purple-600"
+              />
+            </form>
 
-          {/* Navigation */}
+            {showSuggestions && searchTerm.trim() !== '' && (
+              <div className="absolute top-full left-0 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-lg z-50 max-h-80 overflow-y-auto">
+                {filteredProducts.length > 0 ? (
+                  filteredProducts.map((product) => (
+                    <button
+                      key={product.id}
+                      type="button"
+                      onMouseDown={(e) => {
+                        e.preventDefault();
+                        handleSuggestionSelect(product);
+                      }}
+                      className="w-full flex items-center gap-3 px-4 py-3 hover:bg-purple-50 transition-colors border-b last:border-b-0 border-gray-100 text-left"
+                    >
+                      <img
+                        src={product.image}
+                        alt={product.title}
+                        className="w-12 h-12 object-cover rounded-md flex-shrink-0 bg-gray-100"
+                      />
+
+                      <div className="min-w-0 flex-1">
+                        <p className="text-sm font-medium text-gray-900 truncate">
+                          {product.title}
+                        </p>
+                        <p className="text-xs text-gray-500 truncate">
+                          {product.artist}
+                        </p>
+                        <p className="text-xs font-semibold text-purple-600 mt-1">
+                          €{product.price.toFixed(2)}
+                        </p>
+                      </div>
+                    </button>
+                  ))
+                ) : (
+                  <div className="px-4 py-3 text-sm text-gray-500">
+                    No se encontraron resultados
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+
           <nav className="hidden md:flex items-center gap-6">
             <button
               onClick={() => onNavigate('novedades')}
@@ -107,7 +191,6 @@ export function Header({ currentSection, onNavigate, onOpenCart, onOpenWishlist,
               Novedades
             </button>
 
-            {/* Products Dropdown */}
             <div className="relative" ref={productsRef}>
               <button
                 onClick={() => setIsProductsOpen(!isProductsOpen)}
@@ -118,7 +201,9 @@ export function Header({ currentSection, onNavigate, onOpenCart, onOpenWishlist,
                 }`}
               >
                 Productos
-                <ChevronDown className={`w-4 h-4 transition-transform ${isProductsOpen ? 'rotate-180' : ''}`} />
+                <ChevronDown
+                  className={`w-4 h-4 transition-transform ${isProductsOpen ? 'rotate-180' : ''}`}
+                />
               </button>
 
               {isProductsOpen && (
@@ -170,9 +255,7 @@ export function Header({ currentSection, onNavigate, onOpenCart, onOpenWishlist,
             </button>
           </nav>
 
-          {/* Actions */}
           <div className="flex items-center gap-4">
-            {/* User Dropdown */}
             <div className="relative" ref={userRef}>
               <button
                 onClick={() => setIsUserOpen(!isUserOpen)}
@@ -204,14 +287,12 @@ export function Header({ currentSection, onNavigate, onOpenCart, onOpenWishlist,
                       </button>
                     </>
                   ) : (
-                    <>
-                      <button
-                        onClick={handleRegister}
-                        className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-purple-50 hover:text-purple-600 transition-colors"
-                      >
-                        Crear cuenta / Iniciar sesión
-                      </button>
-                    </>
+                    <button
+                      onClick={handleRegister}
+                      className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-purple-50 hover:text-purple-600 transition-colors"
+                    >
+                      Crear cuenta / Iniciar sesión
+                    </button>
                   )}
                 </div>
               )}
@@ -229,6 +310,7 @@ export function Header({ currentSection, onNavigate, onOpenCart, onOpenWishlist,
                 </span>
               )}
             </button>
+
             <button
               onClick={onOpenCart}
               className="p-2 hover:bg-gray-100 rounded-full transition-colors relative"
@@ -245,20 +327,63 @@ export function Header({ currentSection, onNavigate, onOpenCart, onOpenWishlist,
         </div>
       </div>
 
-      {/* Mobile Navigation */}
       <div className="md:hidden border-t border-gray-200">
-        {/* search input on mobile */}
-        <div className="px-4 py-2">
+        <div className="px-4 py-2 relative" ref={searchMobileRef}>
           <form onSubmit={handleSearchSubmit}>
             <input
               type="text"
               value={searchTerm}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                setSearchTerm(e.target.value);
+                setShowSuggestions(true);
+              }}
+              onFocus={() => setShowSuggestions(true)}
               placeholder="Buscar..."
-              className="w-full border rounded px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-purple-600"
+              className="w-full border rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-600"
             />
           </form>
+
+          {showSuggestions && searchTerm.trim() !== '' && (
+            <div className="absolute top-full left-4 right-4 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 max-h-80 overflow-y-auto">
+              {filteredProducts.length > 0 ? (
+                filteredProducts.map((product) => (
+                  <button
+                    key={product.id}
+                    type="button"
+                    onMouseDown={(e) => {
+                      e.preventDefault();
+                      handleSuggestionSelect(product);
+                    }}
+                    className="w-full flex items-center gap-3 px-4 py-3 hover:bg-purple-50 transition-colors border-b last:border-b-0 border-gray-100 text-left"
+                  >
+                    <img
+                      src={product.image}
+                      alt={product.title}
+                      className="w-12 h-12 object-cover rounded-md flex-shrink-0 bg-gray-100"
+                    />
+
+                    <div className="min-w-0 flex-1">
+                      <p className="text-sm font-medium text-gray-900 truncate">
+                        {product.title}
+                      </p>
+                      <p className="text-xs text-gray-500 truncate">
+                        {product.artist}
+                      </p>
+                      <p className="text-xs font-semibold text-purple-600 mt-1">
+                        €{product.price.toFixed(2)}
+                      </p>
+                    </div>
+                  </button>
+                ))
+              ) : (
+                <div className="px-4 py-3 text-sm text-gray-500">
+                  No se encontraron resultados
+                </div>
+              )}
+            </div>
+          )}
         </div>
+
         <nav className="flex overflow-x-auto px-4 py-2 gap-4">
           <button
             onClick={() => onNavigate('novedades')}
@@ -270,6 +395,7 @@ export function Header({ currentSection, onNavigate, onOpenCart, onOpenWishlist,
           >
             Novedades
           </button>
+
           <button
             onClick={() => onNavigate('vinilos')}
             className={`text-sm whitespace-nowrap px-3 py-1 rounded-full transition-colors ${
@@ -280,6 +406,7 @@ export function Header({ currentSection, onNavigate, onOpenCart, onOpenWishlist,
           >
             Vinilos
           </button>
+
           <button
             onClick={() => onNavigate('cds')}
             className={`text-sm whitespace-nowrap px-3 py-1 rounded-full transition-colors ${
@@ -290,6 +417,7 @@ export function Header({ currentSection, onNavigate, onOpenCart, onOpenWishlist,
           >
             CDs
           </button>
+
           <button
             onClick={() => onNavigate('tocadiscos')}
             className={`text-sm whitespace-nowrap px-3 py-1 rounded-full transition-colors ${
@@ -300,6 +428,7 @@ export function Header({ currentSection, onNavigate, onOpenCart, onOpenWishlist,
           >
             Tocadiscos
           </button>
+
           <button
             onClick={() => onNavigate('segunda-mano')}
             className={`text-sm whitespace-nowrap px-3 py-1 rounded-full transition-colors ${
@@ -310,6 +439,7 @@ export function Header({ currentSection, onNavigate, onOpenCart, onOpenWishlist,
           >
             Segunda mano
           </button>
+
           <button
             onClick={() => onNavigate('la-tienda')}
             className={`text-sm whitespace-nowrap px-3 py-1 rounded-full transition-colors ${
@@ -320,6 +450,7 @@ export function Header({ currentSection, onNavigate, onOpenCart, onOpenWishlist,
           >
             La tienda
           </button>
+
           <button
             onClick={() => onNavigate(isAuthenticated ? 'perfil' : 'registro')}
             className={`text-sm whitespace-nowrap px-3 py-1 rounded-full transition-colors ${

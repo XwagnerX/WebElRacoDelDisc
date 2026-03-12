@@ -8,7 +8,8 @@ interface SearchResultsProps {
 }
 
 export function SearchResults({ query, onViewDetails }: SearchResultsProps) {
-  const normalized = query.toLowerCase();
+  const normalized = query.toLowerCase().trim();
+
   const filtered = products.filter(
     (p) =>
       p.title.toLowerCase().includes(normalized) ||
@@ -21,6 +22,7 @@ export function SearchResults({ query, onViewDetails }: SearchResultsProps) {
         <h1 className="text-3xl font-bold mb-2">
           Resultados para "{query}"
         </h1>
+
         {filtered.length === 0 ? (
           <p className="text-gray-600">
             No se encontraron productos que coincidan con la búsqueda.
