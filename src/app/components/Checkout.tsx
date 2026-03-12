@@ -50,7 +50,7 @@ export function Checkout({ isOpen, onClose }: CheckoutProps) {
 
   return (
     <div
-      className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4"
+      className="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4"
       onClick={onClose}
     >
       <div
@@ -95,7 +95,7 @@ export function Checkout({ isOpen, onClose }: CheckoutProps) {
           </div>
         </div>
 
-        <div className="p-6">
+        <div className="p-6 bg-gray-50">
           {/* Step 1: Shipping Info */}
           {step === 1 && (
             <form onSubmit={handleShippingSubmit}>

@@ -20,7 +20,7 @@ export function Cart({ isOpen, onClose, onCheckout }: CartProps) {
 
   return (
     <div
-      className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-end md:items-center justify-end"
+      className="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-50 flex items-end md:items-center justify-end"
       onClick={onClose}
     >
       <div
@@ -43,7 +43,7 @@ export function Cart({ isOpen, onClose, onCheckout }: CartProps) {
         </div>
 
         {/* Cart Items */}
-        <div className="flex-1 overflow-y-auto p-6">
+        <div className="flex-1 overflow-y-auto p-6 bg-gray-50">
           {cart.length === 0 ? (
             <div className="text-center py-12">
               <ShoppingBag className="w-16 h-16 text-gray-300 mx-auto mb-4" />
@@ -57,7 +57,7 @@ export function Cart({ isOpen, onClose, onCheckout }: CartProps) {
               {cart.map((item) => (
                 <div
                   key={item.product.id}
-                  className="flex gap-4 p-4 bg-gray-50 rounded-lg"
+                  className="flex gap-4 p-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow"
                 >
                   <img
                     src={item.product.image}
