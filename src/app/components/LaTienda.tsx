@@ -41,8 +41,8 @@ export function LaTienda() {
                 <div>
                   <p className="font-semibold">Dirección</p>
                   <p className="text-gray-600">
-                    Calle de la Música, 42<br />
-                    28001 Madrid, España
+                    Carrer dels Tallers, 46<br />
+                    08001 Barcelona, España
                   </p>
                 </div>
               </div>
@@ -51,9 +51,9 @@ export function LaTienda() {
                 <div>
                   <p className="font-semibold">Horario</p>
                   <p className="text-gray-600">
-                    Lunes a Viernes: 10:00 - 20:00<br />
-                    Sábados: 11:00 - 21:00<br />
-                    Domingos: Cerrado
+                    Lunes a Viernes: 9:00 - 21:00<br />
+                    Sábados: 10:00 - 18:00<br />
+                    Domingos: Ce  rrado
                   </p>
                 </div>
               </div>
