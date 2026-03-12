@@ -22,6 +22,7 @@ import { Checkout } from './components/Checkout';
 import { Wishlist } from './components/Wishlist';
 import { SearchResults } from './components/SearchResults';
 import { Product } from './types';
+import { Toaster } from 'sonner';
 
 export default function App() {
   const [currentSection, setCurrentSection] = useState('home');
@@ -155,6 +156,8 @@ export default function App() {
             onClose={handleCloseWishlist}
             onViewDetails={handleViewDetails}
           />
+
+          <Toaster position="top-right" richColors closeButton />
         </div>
       </StoreProvider>
     </AuthProvider>

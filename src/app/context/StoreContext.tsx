@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { CartItem, Product } from '../types';
+import { toast } from 'sonner';
 
 interface StoreContextType {
   cart: CartItem[];
@@ -22,6 +23,8 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const [wishlist, setWishlist] = useState<Product[]>([]);
 
   const addToCart = (product: Product) => {
+    const alreadyInCart = cart.some((item) => item.product.id === product.id);
+
     setCart((prevCart) => {
       const existingItem = prevCart.find((item) => item.product.id === product.id);
       if (existingItem) {
@@ -33,6 +36,13 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       }
       return [...prevCart, { product, quantity: 1 }];
     });
+
+    if (alreadyInCart) {
+      toast.success(`Cantidad actualizada: ${product.title}`);
+      return;
+    }
+
+    toast.success(`Añadido al carrito: ${product.title}`);
   };
 
   const removeFromCart = (productId: string) => {
