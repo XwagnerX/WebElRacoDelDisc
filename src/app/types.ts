@@ -27,6 +27,16 @@ export interface CartItem {
   quantity: number;
 }
 
+export interface Order {
+  id: string;
+  createdAt: string;
+  items: CartItem[];
+  subtotal: number;
+  shippingCost: number;
+  total: number;
+  shippingInfo: ShippingInfo;
+}
+
 export interface ShippingInfo {
   fullName: string;
   email: string;

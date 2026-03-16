@@ -40,7 +40,7 @@ export function PoliticaDevoluciones() {
         <div className="bg-white rounded-lg shadow-md p-6">
           <h2 className="text-xl font-bold mb-4 text-purple-600">2. Cómo solicitar una devolución</h2>
           <p className="text-gray-700 mb-4">
-            Escríbenos a devoluciones@elraco-del-disc.es indicando tu número de pedido y el motivo.
+            Escríbenos a elracodeldisc@gmail.com indicando tu número de pedido y el motivo.
             Te enviaremos una etiqueta de devolución prepagada si la devolución es por defecto o
             error nuestro.
           </p>
@@ -75,7 +75,7 @@ export function PoliticaDevoluciones() {
         <div className="bg-white rounded-lg shadow-md p-6">
           <h2 className="text-xl font-bold mb-4 text-purple-600">5. Contacto</h2>
           <p className="text-gray-700">
-            Para cualquier duda sobre devoluciones: devoluciones@elraco-del-disc.es o llámanos al
+            Para cualquier duda sobre devoluciones: elracodeldisc@gmail.com o llámanos al
             +34 912 345 678. Estaremos encantados de ayudarte.
           </p>
         </div>

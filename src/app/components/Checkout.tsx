@@ -9,7 +9,7 @@ interface CheckoutProps {
 }
 
 export function Checkout({ isOpen, onClose }: CheckoutProps) {
-  const { cart, getCartTotal, clearCart } = useStore();
+  const { cart, getCartTotal, clearCart, addOrder } = useStore();
   const [step, setStep] = useState(1);
   const [shippingInfo, setShippingInfo] = useState<ShippingInfo>({
     fullName: '',
@@ -38,6 +38,7 @@ export function Checkout({ isOpen, onClose }: CheckoutProps) {
 
   const handlePaymentSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    addOrder(shippingInfo, shippingCost);
     setStep(3);
   };
 
@@ -45,7 +46,6 @@ export function Checkout({ isOpen, onClose }: CheckoutProps) {
     clearCart();
     onClose();
     setStep(1);
-    alert('¡Pedido realizado con éxito! Recibirás un email de confirmación.');
   };
 
   return (

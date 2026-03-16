@@ -81,7 +81,7 @@ export function PoliticaCookies() {
           <h3 className="text-lg font-bold mb-2">Consentimiento</h3>
           <p className="opacity-90">
             Al continuar navegando en El racó del disc, aceptas el uso de cookies según esta
-            política. Si tienes dudas, contacta con nosotros en info@elraco-del-disc.es.
+            política. Si tienes dudas, contacta con nosotros en Carrer dels Tallers, 46, 08001 Barcelona, España.
           </p>
         </div>
       </div>

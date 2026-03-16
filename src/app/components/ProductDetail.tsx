@@ -9,7 +9,7 @@ interface ProductDetailProps {
 }
 
 export function ProductDetail({ product, onClose }: ProductDetailProps) {
-  const { addToCart, addToWishlist, isInWishlist } = useStore();
+  const { addToCart, addToWishlist, removeFromWishlist, isInWishlist } = useStore();
 
   if (!product) return null;
 
@@ -23,6 +23,10 @@ export function ProductDetail({ product, onClose }: ProductDetailProps) {
   };
 
   const handleToggleWishlist = () => {
+    if (inWishlist) {
+      removeFromWishlist(product.id);
+      return;
+    }
     addToWishlist(product);
   };
 
@@ -131,6 +135,7 @@ export function ProductDetail({ product, onClose }: ProductDetailProps) {
 
                 <button
                   onClick={handleToggleWishlist}
+                  aria-label={inWishlist ? 'Quitar de lista de deseados' : 'Añadir a lista de deseados'}
                   className={`px-6 py-3 rounded-lg border-2 transition-colors ${
                     inWishlist
                       ? 'border-red-500 bg-red-50 text-red-600'

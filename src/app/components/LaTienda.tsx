@@ -78,7 +78,7 @@ export function LaTienda() {
             <h3 className="text-xl font-bold mb-2">Visítanos</h3>
             <p className="mb-4">
               ¿Prefieres ver nuestros productos en persona? Te esperamos en nuestra tienda
-              física en el centro de Madrid.
+              física en el centro de Barcelona.
             </p>
             <p className="text-sm opacity-90">
               Además de nuestra tienda online, disponemos de un amplio espacio donde

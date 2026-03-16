@@ -8,7 +8,7 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ product, onViewDetails }: ProductCardProps) {
-  const { addToCart, addToWishlist, isInWishlist } = useStore();
+  const { addToCart, addToWishlist, removeFromWishlist, isInWishlist } = useStore();
   const inWishlist = isInWishlist(product.id);
 
   const handleAddToCart = (e: React.MouseEvent) => {
@@ -18,6 +18,10 @@ export function ProductCard({ product, onViewDetails }: ProductCardProps) {
 
   const handleToggleWishlist = (e: React.MouseEvent) => {
     e.stopPropagation();
+    if (inWishlist) {
+      removeFromWishlist(product.id);
+      return;
+    }
     addToWishlist(product);
   };
 
@@ -45,7 +49,7 @@ export function ProductCard({ product, onViewDetails }: ProductCardProps) {
         <button
           onClick={handleToggleWishlist}
           className="absolute top-2 right-2 p-2 bg-white rounded-full shadow-md hover:bg-gray-100 transition-colors"
-          aria-label="Añadir a lista de deseados"
+          aria-label={inWishlist ? 'Quitar de lista de deseados' : 'Añadir a lista de deseados'}
         >
           <Heart
             className={`w-4 h-4 ${inWishlist ? 'fill-red-500 text-red-500' : 'text-gray-600'}`}
@@ -70,10 +74,11 @@ export function ProductCard({ product, onViewDetails }: ProductCardProps) {
           <span className="text-xl font-bold text-purple-600">€{product.price.toFixed(2)}</span>
           <button
             onClick={handleAddToCart}
-            className="flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+            disabled={product.stock === 0}
+            className="flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed"
           >
             <ShoppingCart className="w-4 h-4" />
-            <span className="text-sm">Añadir</span>
+            <span className="text-sm">{product.stock === 0 ? 'Agotado' : 'Añadir'}</span>
           </button>
         </div>
 

@@ -24,11 +24,10 @@ export function TerminosCondiciones() {
             compra.
           </p>
           <p className="text-gray-700">
-            El racó del disc es una tienda especializada en música física ubicada en Madrid, España.
+            El racó del disc es una tienda especializada en música física ubicada en Barcelona, España.
             Ofrecemos vinilos, CDs y tocadiscos tanto nuevos como de segunda mano.
           </p>
         </div>
-
         <div className="bg-white rounded-lg shadow-md p-6">
           <h2 className="text-xl font-bold mb-4 text-purple-600">2. Uso del servicio</h2>
           <p className="text-gray-700 mb-4">
@@ -70,8 +69,8 @@ export function TerminosCondiciones() {
         <div className="bg-white rounded-lg shadow-md p-6">
           <h2 className="text-xl font-bold mb-4 text-purple-600">5. Contacto</h2>
           <p className="text-gray-700">
-            Para cualquier cuestión sobre estos términos, puedes contactarnos en info@elraco-del-disc.es
-            o en Calle de la Música, 42, 28001 Madrid.
+            Para cualquier cuestión sobre estos términos, puedes contactarnos en elracodeldisc@gmail.com
+            o en Carrer dels Tallers, 46, 08001 Barcelona, España.
           </p>
         </div>
       </div>

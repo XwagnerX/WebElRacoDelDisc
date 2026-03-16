@@ -1,5 +1,6 @@
-import { User, Mail, Calendar, Disc3 } from 'lucide-react';
+import { User, Mail, Calendar, Disc3, Package } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { useStore } from '../context/StoreContext';
 
 interface ProfilePageProps {
   onNavigate: (section: string) => void;
@@ -7,6 +8,7 @@ interface ProfilePageProps {
 
 export function ProfilePage({ onNavigate }: ProfilePageProps) {
   const { user, isAuthenticated, logout } = useAuth();
+  const { orderHistory } = useStore();
 
   if (!isAuthenticated || !user) {
     return (
@@ -42,6 +44,13 @@ export function ProfilePage({ onNavigate }: ProfilePageProps) {
   const handleLogout = () => {
     logout();
     onNavigate('home');
+  };
+
+  const formatPrice = (price: number) => {
+    return price.toLocaleString('es-ES', {
+      style: 'currency',
+      currency: 'EUR',
+    });
   };
 
   return (
@@ -95,6 +104,69 @@ export function ProfilePage({ onNavigate }: ProfilePageProps) {
                 </div>
               </div>
             </div>
+          </div>
+
+          <div className="bg-white rounded-lg shadow-md p-6">
+            <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
+              <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
+                <Package className="w-5 h-5 text-purple-600" />
+              </div>
+              Historial de pedidos
+            </h2>
+
+            {orderHistory.length === 0 ? (
+              <div className="border border-dashed border-gray-300 rounded-lg p-6 text-center">
+                <p className="text-gray-600 mb-3">Todavía no has realizado ningún pedido.</p>
+                <button
+                  onClick={() => onNavigate('la-tienda')}
+                  className="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+                >
+                  Ir a comprar
+                </button>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {orderHistory.map((order) => (
+                  <div key={order.id} className="border border-gray-200 rounded-lg p-4">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-3">
+                      <div>
+                        <p className="text-sm text-gray-500">Pedido #{order.id.slice(0, 8)}</p>
+                        <p className="font-semibold">{formatDate(order.createdAt)}</p>
+                      </div>
+                      <p className="text-lg font-bold text-purple-600">{formatPrice(order.total)}</p>
+                    </div>
+
+                    <div className="space-y-2 mb-3">
+                      {order.items.map((item) => (
+                        <div key={`${order.id}-${item.product.id}`} className="flex items-center justify-between text-sm">
+                          <span className="text-gray-700">
+                            {item.quantity} x {item.product.title}
+                          </span>
+                          <span className="font-medium text-gray-900">
+                            {formatPrice(item.product.price * item.quantity)}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="pt-3 border-t border-gray-200 text-sm text-gray-600 space-y-1">
+                      <div className="flex justify-between">
+                        <span>Subtotal</span>
+                        <span>{formatPrice(order.subtotal)}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Envío</span>
+                        <span>{formatPrice(order.shippingCost)}</span>
+                      </div>
+                      <div className="flex justify-between font-semibold text-gray-900">
+                        <span>Total</span>
+                        <span>{formatPrice(order.total)}</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
 

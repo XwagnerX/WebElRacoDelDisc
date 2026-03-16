@@ -19,7 +19,7 @@ export function PoliticaPrivacidad() {
         <div className="bg-white rounded-lg shadow-md p-6">
           <h2 className="text-xl font-bold mb-4 text-purple-600">1. Responsable del tratamiento</h2>
           <p className="text-gray-700">
-            El racó del disc, con sede en Calle de la Música, 42, 28001 Madrid, España, es el
+            El racó del disc, con sede en Carrer dels Tallers, 46, 08001 Barcelona, España, es el
             responsable del tratamiento de tus datos personales cuando utilizas nuestra tienda
             online.
           </p>
